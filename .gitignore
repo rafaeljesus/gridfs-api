@@ -1,0 +1,11 @@
+node_modules/
+public/
+coverage/
+npm-debug.log
+.idea
+.vagrant/
+tags
+**/*.swp
+**/*~
+provision/node*.tar.gz
+newrelic_agent.log

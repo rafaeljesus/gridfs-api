@@ -1,0 +1,4 @@
+-r ./lib/mongo
+--reporter spec
+--ui bdd
+--recursive
