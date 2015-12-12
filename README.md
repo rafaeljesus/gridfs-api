@@ -1,5 +1,4 @@
 ## GridFS API
-======================
 
 [ ![Codeship Status for rafaeljesus/gridfs-api](https://codeship.com/projects/79578d40-8337-0133-c7cc-2e117485f168/status?branch=master)](https://codeship.com/projects/121751)
 
