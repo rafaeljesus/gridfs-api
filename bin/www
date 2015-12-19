@@ -6,8 +6,8 @@ const http = require('http')
   , port = process.env.PORT || 3000
 
 http.globalAgent.maxSockets = Infinity
-http.createServer(app.callback())
 
-app.listen(port)
-
-log.info(`GridFS API - port ${port}`)
+const server = http.Server(app)
+server.listen(port)
+server.on('error', err => log.error(`API failed to start ${err}`))
+server.on('listening', () => log.info(`API listening on ${server.address()}`))

@@ -4,7 +4,7 @@ const cluster = require('cluster')
 
 if (cluster.isMaster) {
 
-  require('./lib/mongo')
+  require('./lib/db')
 
   CPUS.forEach(() => cluster.fork())
 
