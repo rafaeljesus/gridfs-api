@@ -11,10 +11,19 @@ const supertest = require('supertest')
 
 describe('Files:RoutesSpec', () => {
 
-  let s
+  let s, fileId
 
   before(() => {
     s = fs.createReadStream(__dirname + '/file.pdf')
+  })
+
+  beforeEach(done => {
+    const ws = gfs.createWriteStream()
+    ws.on('close', file => {
+      fileId = file._id
+      done()
+    })
+    s.pipe(ws)
   })
 
   describe('POST /v1/files', () => {
@@ -42,23 +51,19 @@ describe('Files:RoutesSpec', () => {
   })
 
   describe('GET /v1/files/:id', () => {
-
-    let fileId
-
-    beforeEach(done => {
-      const ws = gfs.createWriteStream()
-      ws.on('close', file => {
-        fileId = file._id
-        done()
-      })
-      s.pipe(ws)
-    })
-
     it('should show a file', done => {
       request.
         get(`/v1/files/${fileId}`).
         expect(200, done)
     })
-
   })
+
+  describe('DELETE /v1/files/:id', () => {
+    it('should delete a file', done => {
+      request.
+        del(`/v1/files/${fileId}`).
+        expect(200, done)
+    })
+  })
+
 })
