@@ -1,7 +1,8 @@
 'use strict'
 
-const krouter = require('koa-router')
-  , router = krouter()
+const express = require('express')
+  , router = express.Router()
+
 /**
  * @api {get} / API Status
  * @apiGroup Status
@@ -13,9 +14,10 @@ const krouter = require('koa-router')
  *    }
  */
 router.
-  get('/', function *() {
-    this.status = 200
-    this.body = {status: 'GridFS API'}
+  get('/', (req, res) => {
+    return res.status(200).json({
+      status: 'GridFS API'
+    })
   })
 
 module.exports = router

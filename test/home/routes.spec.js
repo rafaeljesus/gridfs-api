@@ -10,5 +10,5 @@ describe('Home:RoutesSpec', () => {
     request.
       get('/').
       expect(200, done)
-  });
-});
+  })
+})
