@@ -3,15 +3,22 @@
 const supertest = require('supertest')
   , chai = require('chai')
   , fs = require('fs')
+  , GridFS = require('../../lib/gridfs')
   , app = require('../../')
   , request = supertest(app.listen())
+  , gfs = GridFS()
   , expect = chai.expect
 
 describe('Files:RoutesSpec', () => {
 
+  let s
+
+  before(() => {
+    s = fs.createReadStream(__dirname + '/file.pdf')
+  })
+
   describe('POST /v1/files', () => {
 
-    let s
     const queryStr = {
       name: 'foo',
       type: 'application/pdf',
@@ -19,10 +26,6 @@ describe('Files:RoutesSpec', () => {
         userId: 'bar'
       }
     }
-
-    beforeEach(() => {
-      s = fs.createReadStream(__dirname + '/file.pdf')
-    })
 
     it('should create file', done => {
       request.
@@ -35,6 +38,26 @@ describe('Files:RoutesSpec', () => {
           expect(res.body._id).to.be.ok
           done()
         })
+    })
+  })
+
+  describe('GET /v1/files/:id', () => {
+
+    let fileId
+
+    beforeEach(done => {
+      const ws = gfs.createWriteStream()
+      ws.on('close', file => {
+        fileId = file._id
+        done()
+      })
+      s.pipe(ws)
+    })
+
+    it('should show a file', done => {
+      request.
+        get(`/v1/files/${fileId}`).
+        expect(200, done)
     })
 
   })

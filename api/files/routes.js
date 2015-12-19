@@ -51,6 +51,7 @@ router.
   get('/v1/files/:id', (req, res) => {
     const query = {_id: mongoose.Types.ObjectId(req.params.id)}
     gfs.files.findOne(query, (err, file) => {
+      if (err) return res.sendStatus(412)
       res.contentType(file.contentType)
       gfs.createReadStream(query).pipe(res)
     })
