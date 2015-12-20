@@ -1,10 +1,14 @@
 'use strict'
 
-const express = require('express')
+const krouter = require('koa-router')
+  , Promise = require('bluebird')
   , mongoose = require('mongoose')
   , GridFS = require('../../lib/gridfs')
-  , router  = express.Router()
+  , router = krouter()
   , gfs = GridFS()
+
+Promise.promisify(gfs.remove)
+Promise.promisify(gfs.files.findOne)
 
 router.
   /**
@@ -25,17 +29,22 @@ router.
   * @apiErrorExample {json} Error
   *   HTTP/1.1 422 Unprocessable Entity
   */
-  post('/v1/files', (req, res) => {
+  post('/v1/files', function *() {
     const ws = gfs.createWriteStream({
-      filename: req.query.name,
-      /*eslint camelcase: 0*/
-      content_type: req.query.type,
-      metadata: req.query.metadata
+      filename: this.query.name,
+      content_type: this.query.type,
+      metadata: this.query.metadata
     })
 
-    ws.on('close', file => res.status(200).json(file))
-    ws.on('error', () => res.sendStatus(412))
-    req.pipe(ws)
+    const fn = new Promise((resolve, reject) => {
+      this.req.pipe(ws)
+      ws.on('close', resolve)
+      ws.on('error', reject)
+    })
+
+    this.body = yield fn.
+      then(file => file).
+      catch(err => this.throw(422, err))
   }).
   /**
   * @api {get} /v1/files/:id Retrieves a file by id
@@ -48,13 +57,16 @@ router.
   * @apiErrorExample {json} Error
   *   HTTP/1.1 412 Unprocessable Entity
   */
-  get('/v1/files/:id', (req, res) => {
-    const query = {_id: mongoose.Types.ObjectId(req.params.id)}
-    gfs.files.findOne(query, (err, file) => {
-      if (err) return res.sendStatus(412)
-      res.contentType(file.contentType)
-      gfs.createReadStream(query).pipe(res)
-    })
+  get('/v1/files/:id', function *() {
+    const query = {_id: mongoose.Types.ObjectId(this.params.id)}
+    yield gfs.files.
+      findOne(query).
+      then(file => {
+        this.type = file.contentType
+        this.body = file
+        gfs.createReadStream(query).pipe(this.res)
+      }).
+      catch(err => this.throw(412, err))
   }).
   /**
   * @api {delete} /v1/files Remove a File by id
@@ -70,12 +82,12 @@ router.
   * @apiErrorExample {json} Error
   *   HTTP/1.1 412 Precondition Failed
   */
-  delete('/v1/files/:id', (req, res) => {
-    const query = {_id: mongoose.Types.ObjectId(req.params.id)}
-    gfs.remove(query, err => {
-      if (err) return res.sendStatus(412)
-      return res.status(200).json({message: 'OK'})
-    })
+  delete('/v1/files/:id', function *() {
+    const query = {_id: mongoose.Types.ObjectId(this.params.id)}
+    yield gfs.remove(query).then(() => {
+      this.body = {message: 'OK'}
+    }).
+    catch(err => this.throw(412, err))
   })
 
 module.exports = router
