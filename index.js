@@ -1,15 +1,21 @@
 'use strict'
 
-const express = require('express')
-  , cors = require('cors')
-  , helmet = require('helmet')
+const koa = require('koa')
+  , cors = require('kcors')
+  , helmet = require('koa-helmet')
+  , logger = require('koa-logger')
+  , serve = require('koa-static')
   , homeAPI = require('./api/home/routes')
   , fileAPI = require('./api/files/routes')
-  , app = express()
+  , app = koa()
 
-app.use(cors())
+app.use(logger())
+app.use(cors({
+  methods: ['POST', 'GET', 'DELETE']
+}))
 app.use(helmet())
-app.use(homeAPI)
-app.use(fileAPI)
+app.use(homeAPI.routes())
+app.use(fileAPI.routes())
+app.use(serve('public'))
 
 module.exports = app
