@@ -58,6 +58,14 @@ describe('Files:RoutesSpec', () => {
     })
   })
 
+  describe('GET /v1/files/:id/check-exists', () => {
+    it('should check if a file exists', done => {
+      request.
+        get(`/v1/files/${fileId}/check-exists`).
+        expect(200, done)
+    })
+  })
+
   describe('DELETE /v1/files/:id', () => {
     it('should delete a file', done => {
       request.

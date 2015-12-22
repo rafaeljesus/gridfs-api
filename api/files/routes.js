@@ -7,7 +7,7 @@ const krouter = require('koa-router')
   , router = krouter()
   , gfs = GridFS()
 
-Promise.promisify(gfs.remove)
+Promise.promisifyAll(gfs)
 Promise.promisify(gfs.files.findOne)
 
 router.
@@ -67,6 +67,26 @@ router.
         gfs.createReadStream(query).pipe(this.res)
       }).
       catch(err => this.throw(412, err))
+  }).
+  /**
+  * @api {get} /v1/files/:id/check-exists Check if a file exists
+  * @apiGroup File
+  * @apiSuccess {String} id File id
+  * @apiExample {json} Example usage:
+  *   curl -X POST http://gridfs-api/v1/files/:id/check-exists \
+  *   -d 'id=5674a8f04718fc712c0f05dd'
+  * @apiSuccessExample {json} Success-Response:
+  *   HTTP/1.1 200 true
+  * @apiErrorExample {json} Error
+  *   HTTP/1.1 412 Unprocessable Entity
+  */
+  get('/v1/files/:id/check-exists', function *() {
+    const query = {_id: mongoose.Types.ObjectId(this.params.id)}
+    yield gfs.exist(query).
+    then(found => {
+      this.body = found
+    }).
+    catch(err => this.throw(412, err))
   }).
   /**
   * @api {delete} /v1/files Remove a File by id
