@@ -8,16 +8,10 @@ if (cluster.isMaster) {
 
   CPUS.forEach(() => cluster.fork())
 
-  cluster.on('listening', worker => {
-    log.info('Worker %d connected', worker.process.pid)
-  })
-
-  cluster.on('disconnect', worker => {
-    log.info('Worker %d disconnect', worker.process.pid)
-  })
-
+  cluster.on('listening', worker => log.info(`Worker ${worker.process.pid} connected`))
+  cluster.on('disconnect', worker => log.info(`Worker ${worker.process.pid} disconnect`))
   cluster.on('exit', worker => {
-    log.info('Worker %d exited', worker.process.pid)
+    log.info(`Worker ${worker.process.pid} exited`)
     cluster.fork()
   })
 }
