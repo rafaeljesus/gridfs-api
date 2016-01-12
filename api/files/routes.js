@@ -2,7 +2,7 @@
 
 const krouter = require('koa-router')
   , Promise = require('bluebird')
-  , mongoose = require('mongoose')
+  , ObjectId = require('mongoose').Types.ObjectId
   , GridFS = require('../../lib/gridfs')
   , router = krouter()
   , gfs = GridFS()
@@ -58,7 +58,7 @@ router.
   *   HTTP/1.1 412 Unprocessable Entity
   */
   get('/v1/files/:id', function *() {
-    const query = {_id: mongoose.Types.ObjectId(this.params.id)}
+    const query = {_id: ObjectId(this.params.id)}
     yield gfs.files.
       findOne(query).
       then(file => {
@@ -81,9 +81,8 @@ router.
   *   HTTP/1.1 412 Unprocessable Entity
   */
   get('/v1/files/:id/check-exists', function *() {
-    const query = {_id: mongoose.Types.ObjectId(this.params.id)}
-    yield gfs.exist(query).
-    then(found => {
+    const query = {_id: ObjectId(this.params.id)}
+    yield gfs.exist(query).then(found => {
       this.body = found
     }).
     catch(err => this.throw(412, err))
@@ -103,7 +102,7 @@ router.
   *   HTTP/1.1 412 Precondition Failed
   */
   delete('/v1/files/:id', function *() {
-    const query = {_id: mongoose.Types.ObjectId(this.params.id)}
+    const query = {_id: ObjectId(this.params.id)}
     yield gfs.remove(query).then(() => {
       this.body = {message: 'OK'}
     }).
