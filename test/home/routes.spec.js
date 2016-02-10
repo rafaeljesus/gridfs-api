@@ -1,8 +1,9 @@
 'use strict'
 
 const supertest = require('supertest')
-  , app = require('../../')
-  , request = supertest(app.listen())
+
+const app = require('../../')
+const request = supertest(app.listen())
 
 describe('Home:RoutesSpec', () => {
 

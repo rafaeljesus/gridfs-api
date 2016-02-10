@@ -1,13 +1,15 @@
 'use strict'
 
 const supertest = require('supertest')
-  , chai = require('chai')
-  , fs = require('fs')
-  , GridFS = require('../../lib/gridfs')
-  , app = require('../../')
-  , request = supertest(app.listen())
-  , gfs = GridFS()
-  , expect = chai.expect
+const chai = require('chai')
+const fs = require('fs')
+
+const GridFS = require('../../lib/gridfs')
+const app = require('../../')
+
+const request = supertest(app.listen())
+const gfs = GridFS()
+const expect = chai.expect
 
 describe('Files:RoutesSpec', () => {
 

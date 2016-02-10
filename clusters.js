@@ -1,6 +1,7 @@
 const cluster = require('cluster')
-  , CPUS = require('os').cpus()
-  , log = require('./lib/log')
+const CPUS = require('os').cpus()
+
+const log = require('./lib/log')
 
 if (cluster.isMaster) {
 
