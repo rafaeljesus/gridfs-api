@@ -1,14 +1,17 @@
 'use strict'
 
 const krouter = require('koa-router')
-  , Promise = require('bluebird')
-  , ObjectId = require('mongoose').Types.ObjectId
-  , GridFS = require('../../lib/gridfs')
-  , router = krouter()
-  , gfs = GridFS()
+const Promise = require('bluebird')
+const ObjectId = require('mongoose').Types.ObjectId
+
+const GridFS = require('../../lib/gridfs')
+const router = krouter()
+const gfs = GridFS()
 
 Promise.promisifyAll(gfs)
 Promise.promisify(gfs.files.findOne)
+
+module.exports = router
 
 router.
   /**
@@ -42,9 +45,11 @@ router.
       ws.on('error', reject)
     })
 
-    this.body = yield fn.
-      then(file => file).
-      catch(err => this.throw(422, err))
+    try {
+      this.body = yield fn
+    } catch (err) {
+      this.throw(422, err)
+    }
   }).
   /**
   * @api {get} /v1/files/:id Retrieves a file by id
@@ -59,14 +64,14 @@ router.
   */
   get('/v1/files/:id', function *() {
     const query = {_id: ObjectId(this.params.id)}
-    yield gfs.files.
-      findOne(query).
-      then(file => {
-        this.type = file.contentType
-        this.body = file
-        gfs.createReadStream(query).pipe(this.res)
-      }).
-      catch(err => this.throw(412, err))
+    try {
+      const file = yield gfs.files.findOne(query)
+      this.type = file.contentType
+      this.body = file
+      gfs.createReadStream(query).pipe(this.res)
+    } catch (err) {
+      this.throw(412, err)
+    }
   }).
   /**
   * @api {get} /v1/files/:id/check-exists Check if a file exists
@@ -82,10 +87,11 @@ router.
   */
   get('/v1/files/:id/check-exists', function *() {
     const query = {_id: ObjectId(this.params.id)}
-    yield gfs.exist(query).then(found => {
-      this.body = found
-    }).
-    catch(err => this.throw(412, err))
+    try {
+      this.body = yield gfs.exist(query)
+    } catch (err) {
+      this.throw(412, err)
+    }
   }).
   /**
   * @api {delete} /v1/files Remove a File by id
@@ -103,10 +109,10 @@ router.
   */
   delete('/v1/files/:id', function *() {
     const query = {_id: ObjectId(this.params.id)}
-    yield gfs.remove(query).then(() => {
+    try {
+      yield gfs.remove(query)
       this.body = {message: 'OK'}
-    }).
-    catch(err => this.throw(412, err))
+    } catch (err) {
+      this.throw(412, err)
+    }
   })
-
-module.exports = router

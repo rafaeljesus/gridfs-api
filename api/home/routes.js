@@ -1,7 +1,9 @@
 'use strict'
 
 const krouter = require('koa-router')
-  , router = krouter()
+const router = krouter()
+
+module.exports = router
 
 router.
 /**
@@ -18,5 +20,3 @@ router.
     this.status = 200
     this.body = {status: 'GridFS API'}
   })
-
-module.exports = router
