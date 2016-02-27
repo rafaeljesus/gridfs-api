@@ -1,22 +1,10 @@
-'use strict'
+import Router from 'koa-router'
 
-const krouter = require('koa-router')
-const router = krouter()
+const router = Router()
 
-module.exports = router
+export default router
 
-router.
-/**
- * @api {get} / API Status
- * @apiGroup Status
- * @apiSuccess {String} status API status message
- * @apiSuccessExample {json} Success
- *    HTTP/1.1 200 OK
- *    {
- *      "status": "GridFS API"
- *    }
- */
-  get('/', function *() {
-    this.status = 200
-    this.body = {status: 'GridFS API'}
-  })
+router.get('/', async function() {
+  this.status = 200
+  this.body = {status: 'GridFS API'}
+})

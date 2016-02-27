@@ -1,5 +1,0 @@
-# node_modules ignored by default
-coverage/
-db-scripts/
-public/
-newrelic.js

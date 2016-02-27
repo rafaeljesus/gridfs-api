@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
+require('babel-register')
+require('babel-polyfill')
+
 const http = require('http')
 
 const log = require('../lib/log')
-const app = require('../')
+const app = require('../').default
 const port = process.env.PORT || 3000
 
 http.globalAgent.maxSockets = Infinity
