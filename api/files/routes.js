@@ -1,13 +1,13 @@
 import Router from 'koa-router'
 
-import File from './model'
+import * as File from './model'
 
 const router = Router()
 
 export default router
 
 router
-.post('/v1/files', async function () {
+.post('/v1/files', async function (context) {
   try {
     const ws = File.writeStream(this.query)
     const store = new Promise((resolve, reject) => {
@@ -21,18 +21,19 @@ router
   }
 })
 
-.get('/v1/files/:id', async function () {
+.get('/v1/files/:id', async function (context) {
   try {
-    const file = await File.findOne(this.params.id)
+    const id = this.params.id
+    const file = await File.findOne(id)
     this.type = file.contentType
     this.body = file
-    File.readStream.pipe(this.res)
+    File.readStream(id).pipe(this.res)
   } catch (err) {
     this.throw(412, err)
   }
 })
 
-.get('/v1/files/:id/check-exists', async function () {
+.get('/v1/files/:id/check-exists', async function (context) {
   try {
     this.body = await File.exist(this.params.id)
   } catch (err) {
@@ -40,11 +41,12 @@ router
   }
 })
 
-.delete('/v1/files/:id', async function () {
+.delete('/v1/files/:id', async function (context) {
   try {
     await File.remove(this.params.id)
     this.body = {message: 'OK'}
   } catch (err) {
+    console.log(err)
     this.throw(412, err)
   }
 })

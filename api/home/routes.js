@@ -4,7 +4,7 @@ const router = Router()
 
 export default router
 
-router.get('/', async function() {
+router.get('/', async function () {
   this.status = 200
   this.body = {status: 'GridFS API'}
 })
