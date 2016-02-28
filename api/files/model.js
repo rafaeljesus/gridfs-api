@@ -5,12 +5,20 @@ import GridFS from '../../lib/gridfs'
 const gfs = GridFS()
 const ObjectId = mongoose.Types.ObjectId
 
-export function readStream (id) {
+export {
+  readStream,
+  writeStream,
+  findOne,
+  exist,
+  remove
+}
+
+function readStream (id) {
   const query = {_id: ObjectId(id)}
   return gfs.createReadStream(query)
 }
 
-export function writeStream (options) {
+function writeStream (options) {
   options || (options = {})
   return gfs.createWriteStream({
     filename: options.name,
@@ -19,7 +27,7 @@ export function writeStream (options) {
   })
 }
 
-export function findOne (id) {
+function findOne (id) {
   const query = {_id: ObjectId(id)}
   return new Promise((resolve, reject) => {
     gfs.files.findOne(query, (err, file) => {
@@ -29,7 +37,7 @@ export function findOne (id) {
   })
 }
 
-export function exist (id) {
+function exist (id) {
   const query = {_id: ObjectId(id)}
   return new Promise((resolve, reject) => {
     gfs.exist(query, (err, found) => {
@@ -39,7 +47,7 @@ export function exist (id) {
   })
 }
 
-export function remove (id) {
+function remove (id) {
   const query = {_id: ObjectId(id)}
   return new Promise((resolve, reject) => {
     gfs.remove(query, (err) => {
