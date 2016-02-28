@@ -1,27 +1,24 @@
-'use strict'
+import supertest from 'supertest'
+import chai from 'chai'
+import fs from 'fs'
 
-const supertest = require('supertest')
-const chai = require('chai')
-const fs = require('fs')
+import * as File from '../../api/files/model'
 
-const GridFS = require('../../lib/gridfs')
-const app = require('../../')
-
+const app = require('../../').default
 const request = supertest(app.listen())
-const gfs = GridFS()
 const expect = chai.expect
 
 describe('Files:RoutesSpec', () => {
-
-  let s, fileId
+  let s
+  let fileId
 
   before(() => {
-    s = fs.createReadStream(__dirname + '/file.pdf')
+    s = fs.createReadStream(`${__dirname}/file.pdf`)
   })
 
-  beforeEach(done => {
-    const ws = gfs.createWriteStream()
-    ws.on('close', file => {
+  beforeEach((done) => {
+    const ws = File.writeStream()
+    ws.on('close', (file) => {
       fileId = file._id
       done()
     })
@@ -29,7 +26,6 @@ describe('Files:RoutesSpec', () => {
   })
 
   describe('POST /v1/files', () => {
-
     const queryStr = {
       name: 'foo',
       type: 'application/pdf',
@@ -38,42 +34,41 @@ describe('Files:RoutesSpec', () => {
       }
     }
 
-    it('should create file', done => {
-      request.
-        post('/v1/files').
-        type('multipart/form-data').
-        query(queryStr).
-        send(new Buffer(s.toString(), 'base64')).
-        expect(200, (err, res) => {
-          if (err) return done(err)
-          expect(res.body._id).to.be.ok
-          done()
-        })
+    it('should create file', (done) => {
+      request
+      .post('/v1/files')
+      .type('multipart/form-data')
+      .query(queryStr)
+      .send(new Buffer(s.toString(), 'base64'))
+      .expect(200, (err, res) => {
+        if (err) return done(err)
+        expect(res.body._id).to.be.ok
+        done()
+      })
     })
   })
 
   describe('GET /v1/files/:id', () => {
-    it('should show a file', done => {
-      request.
-        get(`/v1/files/${fileId}`).
-        expect(200, done)
+    it('should show a file', (done) => {
+      request
+      .get(`/v1/files/${fileId}`)
+      .expect(200, done)
     })
   })
 
   describe('GET /v1/files/:id/check-exists', () => {
-    it('should check if a file exists', done => {
-      request.
-        get(`/v1/files/${fileId}/check-exists`).
-        expect(200, done)
+    it('should check if a file exists', (done) => {
+      request
+      .get(`/v1/files/${fileId}/check-exists`)
+      .expect(200, done)
     })
   })
 
   describe('DELETE /v1/files/:id', () => {
-    it('should delete a file', done => {
-      request.
-        del(`/v1/files/${fileId}`).
-        expect(200, done)
+    it('should delete a file', (done) => {
+      request
+      .del(`/v1/files/${fileId}`)
+      .expect(200, done)
     })
   })
-
 })
