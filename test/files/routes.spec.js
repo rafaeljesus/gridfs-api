@@ -3,8 +3,8 @@ import chai from 'chai'
 import fs from 'fs'
 
 import * as File from '../../api/files/model'
+import app from '../../'
 
-const app = require('../../').default
 const request = supertest(app.listen())
 const expect = chai.expect
 

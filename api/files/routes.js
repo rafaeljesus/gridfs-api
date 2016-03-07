@@ -46,7 +46,6 @@ router
     await File.remove(this.params.id)
     this.body = {message: 'OK'}
   } catch (err) {
-    console.log(err)
     this.throw(412, err)
   }
 })

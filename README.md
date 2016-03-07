@@ -9,6 +9,8 @@
 [![bitHound Dev Dependencies](https://www.bithound.io/github/rafaeljesus/gridfs-api/badges/devDependencies.svg)](https://www.bithound.io/github/rafaeljesus/gridfs-api/master/dependencies/npm)
 [![bitHound Code](https://www.bithound.io/github/rafaeljesus/gridfs-api/badges/code.svg)](https://www.bithound.io/github/rafaeljesus/gridfs-api)
 
+[![js-standard-style](https://cdn.rawgit.com/feross/standard/master/badge.svg)](https://github.com/rafaeljesus/gridfs-api)
+
 * Exposes a REST API for MongoDB GridFS
 
 ## Installation
@@ -16,14 +18,14 @@
 npm install -g gridfs-api
 ```
 
-## Running tests
+## Running server
 To run a suite tests execute:
 ```bash
-npm test
+npm run build && npm run serve
 ```
 
 ## Built with
-- [nodejs](https://https://nodejs.org) Backend is a node-v.5.3.0.
+- [nodejs](https://https://nodejs.org) Backend is a node-v.5.7.1.
 - [koa](http://koajs.com) API is a KOA app. It respond to requests RESTfully in JSON.
 - [Mongodb](https://www.mongodb.com) Mongodb as a data store.
 
@@ -39,11 +41,6 @@ $ eval $(docker-machine env default)
 $ docker run -it -e "NODE_ENV=development" -v "$(pwd)":/data --link mongo:mongo -w /data -p 3000:3000 rafaeljesus/gridfs-api
 $ curl `docker-machine ip default`:3000
 ```
-
-## API documentation
-We use source code comments to add documentation.
-
-You can browse an HTML documenation at [docs](http://gridfs-api.herokuapp.com/apidoc/index.html)
 
 ## Contributing
 - Fork it
