@@ -1,21 +1,17 @@
-import koa from 'koa'
+import Koa from 'koa'
 import cors from 'kcors'
-import helmet from 'koa-helmet'
 import logger from 'koa-logger'
 
 import homeAPI from './api/home/routes'
 import fileAPI from './api/files/routes'
 
-const app = koa()
+const app = new Koa()
 
 app.use(logger())
 app.use(cors({
   methods: ['POST', 'GET', 'DELETE']
 }))
-app.use(helmet())
 app.use(homeAPI.routes())
 app.use(fileAPI.routes())
-
-app.experimental = true
 
 export default app

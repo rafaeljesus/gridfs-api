@@ -2,7 +2,7 @@ import supertest from 'supertest'
 import chai from 'chai'
 import fs from 'fs'
 
-import * as File from '../../api/files/model'
+import {writeStream} from '../../api/files/model'
 import app from '../../'
 
 const request = supertest(app.listen())
@@ -17,7 +17,7 @@ describe('Files:RoutesSpec', () => {
   })
 
   beforeEach((done) => {
-    const ws = File.writeStream()
+    const ws = writeStream()
     ws.on('close', (file) => {
       fileId = file._id
       done()
