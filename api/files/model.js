@@ -18,8 +18,7 @@ function readStream (id) {
   return gfs.createReadStream(query)
 }
 
-function writeStream (options) {
-  options || (options = {})
+function writeStream (options = {}) {
   return gfs.createWriteStream({
     filename: options.name,
     content_type: options.type,
