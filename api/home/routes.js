@@ -1,10 +1,11 @@
 import Router from 'koa-router'
 
+import { reply as wrap } from '../../lib/wrap'
+
 const router = Router()
 
 export default router
 
-router.get('/', async (ctx) => {
-  ctx.status = 200
-  ctx.body = await {status: 'GridFS API'}
-})
+router.get('/', wrap(async () => {
+  return { status: 'GridFS API' }
+}))
