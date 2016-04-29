@@ -2,7 +2,7 @@ import supertest from 'supertest-as-promised'
 import chai from 'chai'
 import fs from 'fs'
 
-import { writeStream } from '../../api/files/model'
+import { writeStream } from '../../resources/files/model'
 import { test as wrap } from '../../lib/wrap'
 import app from '../../'
 

@@ -1,11 +1,13 @@
 import Koa from 'koa'
 import cors from 'kcors'
 import logger from 'koa-logger'
+import http from 'http'
 
-import homeAPI from './api/home/routes'
-import fileAPI from './api/files/routes'
+import homeAPI from './resources/home/routes'
+import fileAPI from './resources/files/routes'
 
 const app = new Koa()
+const port = process.env.PORT || 3000
 
 app.use(logger())
 app.use(cors({
@@ -14,4 +16,9 @@ app.use(cors({
 app.use(homeAPI.routes())
 app.use(fileAPI.routes())
 
-export default app
+http.globalAgent.maxSockets = Infinity
+http.createServer(app.callback())
+
+app.listen(port)
+
+console.log(`GridFS API - port ${port}`)

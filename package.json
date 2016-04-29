@@ -3,17 +3,16 @@
   "version": "0.1.3",
   "description": "MongoDB GridFS files exposed as REST API",
   "scripts": {
-    "start": "node bin/www.js",
+    "start": "node index.js",
     "clean": "rm -rf build && mkdir build",
     "build": "npm run clean && babel --presets es2015,stage-2 --plugins transform-runtime --ignore node_modules,test . -d build",
-    "serve": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 build/clusters.js",
+    "serve": "node --optimize_for_size --max_old_space_size=460 --gc_interval=100 build/index.js",
     "test": "npm run lint && NODE_ENV=test mocha",
     "lint": "standard --verbose | snazzy"
   },
   "author": "Rafael Jesus <rafaelljesus86@gmail.com> (http://github.com/rafaeljesus)",
   "license": "MIT",
   "pre-commit": [
-    "test"
   ],
   "standard": {
     "parser": "babel-eslint",
