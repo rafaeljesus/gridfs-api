@@ -27,10 +27,11 @@ npm run build && npm run serve
 ## API Documentation
 ### create
 ```bash
-curl -X POST 'http://localhost:3000/v1/files' \
- -d 'name=foo' \
- -d 'type=application/pdf' \
- -d 'metadata[userId]=1'
+curl -i -X POST 'http://localhost:3000/v1/files' \
+ -F 'name=foo' \
+ -F 'type=application/pdf' \
+ -F 'metadata[userId]=1' \
+ -F 'image=@/home/username/file.pdf'
 ```
  
 ### show
