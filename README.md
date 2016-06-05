@@ -1,7 +1,6 @@
 ## GridFS API
 
 [ ![Codeship Status for rafaeljesus/gridfs-api](https://codeship.com/projects/79578d40-8337-0133-c7cc-2e117485f168/status?branch=master)](https://codeship.com/projects/121751)
-[![Docker Image Size](https://img.shields.io/imagelayers/image-size/rafaeljesus/gridfs-api/latest.svg)](https://hub.docker.com/r/rafaeljesus/gridfs-api/)
 [![Docker Image Pulls](https://img.shields.io/docker/pulls/rafaeljesus/gridfs-api.svg)](https://hub.docker.com/r/rafaeljesus/gridfs-api/) 
 [![NPM version](http://img.shields.io/npm/v/gridfs-api.svg)](https://www.npmjs.org/package/gridfs-api)
 [![bitHound Overall Score](https://www.bithound.io/github/rafaeljesus/gridfs-api/badges/score.svg)](https://www.bithound.io/github/rafaeljesus/gridfs-api)
