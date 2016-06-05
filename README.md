@@ -24,6 +24,30 @@ To run a suite tests execute:
 npm run build && npm run serve
 ```
 
+## API Documentation
+### create
+```bash
+curl -X POST 'http://localhost:3000/v1/files' \
+ -d 'name=foo' \
+ -d 'type=application/pdf' \
+ -d 'metadata[userId]=1'
+```
+ 
+### show
+```bash
+curl -X GET 'http://localhost:3000/v1/files/1'
+```
+
+### check-exists
+```bash
+curl -X GET 'http://localhost:3000/v1/files/1/check-exists'
+```
+
+### delete
+```bash
+curl -X DELETE 'http://localhost:3000/v1/files/1'
+```
+
 ## Built with
 - [nodejs](https://https://nodejs.org) Backend is a node-v.5.7.1.
 - [koa](http://koajs.com) API is a KOA app. It respond to requests RESTfully in JSON.
